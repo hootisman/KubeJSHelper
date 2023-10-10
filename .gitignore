@@ -1,3 +1,4 @@
 output/*
 sheets/*
 datapack/*
+__pycache__/*

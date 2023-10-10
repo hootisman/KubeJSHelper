@@ -1,49 +1,24 @@
 import csv
 import os
 import shutil
+import datapackstrs
 from collections import defaultdict
 
 SKILLS = ["magic", "slayer", "fish", "attack", "alch", "mine", "eng", "def", "build", "smith", "wood", "ranged", "craft", "farm", "fly", "cook", "agility", "navi", "hunt", "tame", "stealth", "char", "myst"]
 SKILLIDS = dict(zip(SKILLS,["magic","slayer","fishing","attack","alchemy","mining","engineering","defence","building","smithing","woodcutting","ranged","crafting","farming","flying","cooking","agility","navigation","hunter","taming","stealth","charisma","mysticcrafting"]))
+DATAPACKFILES = {"armor": datapackstrs.ARMOR_STR, "item": datapackstrs.ITEM_STR, "block": datapackstrs.BLOCK_STR}
 OUTPUTS = []
 OUTPUT_LOC = "output/"
 DATAPACK_LOC = "datapack/"
 TAGS = defaultdict(list)
 
-def create_datapack():
+def create_datapack(idtype):
     for skill,skilltags in TAGS.items():
         for tag in skilltags:
             skillpath = DATAPACK_LOC + tag.split(":")[1] + '.json'
             req = getReq(tag,skill)
             if not os.path.exists(skillpath):
-                file_write(skillpath, 
-                        '''
-{{\"negative_effect\": {{
-        \"minecraft:weakness\":3,
-        \"minecraft:slowness\":3,
-        \"minecraft:mining_fatigue\":3,
-        \"minecraft:blindness\":3
-    }},
-    \"override\": false,
-    \"isTagFor\": [
-        \"#{0}\"
-    ],
-    \"requirements\": {{
-        \"USE\": {{
-        \"{1}\":{2}
-        }},
-        \"WEAR\": {{
-        \"{1}\":{2}
-        }},
-        \"INTERACT\": {{
-        \"{1}\":{2}
-        }},
-        \"USE_ENCHANTMENT\": {{
-        \"{1}\":{2}
-        }}
-    }}
-
-}}'''.format(tag,SKILLIDS[skill],req))
+                file_write(skillpath, DATAPACKFILES[idtype].format(tag,SKILLIDS[skill],req))
 
 def getReq(tag, skill):
     cutted = (tag.split(":")[1]).split('_')[0]
@@ -70,7 +45,16 @@ def add_skill_req(idtype, item, skill, req):
 
     if not os.path.exists(skillpath):
         #CHANGE ITEM TO BLOCK ETC WHEN WORKIGN WITH THEM!
-        file_write(skillpath,'ServerEvents.tags(\'item\', event => {\n')
+        tagtype = ""
+        match idtype:
+            case "armor" | "item":
+                tagtype = "item"
+            case "block":
+                tagtype = "block"
+            case _:
+                tagtype = "item"
+
+        file_write(skillpath,'ServerEvents.tags(\'' + tagtype + '\', event => {\n')
         OUTPUTS.append(skill)
 
     file_write(skillpath,'\tevent.add(\'' + tag + '\',\'' + item + '\')\n')
@@ -86,16 +70,19 @@ def file_write(loc,line):
         f.write(line)
 
 if __name__ == "__main__":
-    idtype = input('id type? ')
-    shutil.rmtree(OUTPUT_LOC)
-    os.mkdir(OUTPUT_LOC)
+    idtype = input('id type? (armor, item, block)\n')
+    # shutil.rmtree(OUTPUT_LOC)
+    # os.mkdir(OUTPUT_LOC)
+    
     OUTPUT_LOC = OUTPUT_LOC + idtype + '/'
-    os.mkdir(OUTPUT_LOC)
+    if os.path.exists(OUTPUT_LOC):
+        shutil.rmtree(OUTPUT_LOC)
+    os.makedirs(OUTPUT_LOC)
 
-    shutil.rmtree(DATAPACK_LOC)
-    os.mkdir(DATAPACK_LOC)
     DATAPACK_LOC = DATAPACK_LOC + idtype + '/'
-    os.mkdir(DATAPACK_LOC)
+    if os.path.exists(DATAPACK_LOC):
+        shutil.rmtree(DATAPACK_LOC)
+    os.makedirs(DATAPACK_LOC)
 
     parse_csv(idtype)
-    create_datapack()
+    create_datapack(idtype)
