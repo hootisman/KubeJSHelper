@@ -38,7 +38,9 @@ ARMOR_STR = '''{{
     \"negative_effect\": {{
         \"minecraft:weakness\":3,
         \"minecraft:slowness\":3,
-        \"minecraft:mining_fatigue\":3
+        \"minecraft:mining_fatigue\":3,
+        \"minecraft:wither\":3,
+        \"minecraft:blindness\":3
     }},
     \"override\": false,
     \"isTagFor\": [
