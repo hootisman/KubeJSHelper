@@ -39,7 +39,7 @@ ARMOR_STR = '''{{
         \"minecraft:weakness\":3,
         \"minecraft:slowness\":3,
         \"minecraft:mining_fatigue\":3,
-        \"minecraft:wither\":3,
+        \"minecraft:wither\":1,
         \"minecraft:blindness\":3
     }},
     \"override\": false,
