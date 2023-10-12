@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# 1 : path to server
+# 2: path to datapack
 path=$(pwd)
 
 cp -r "$path/output"/* "$1/kubejs/server_scripts/pmmo/"

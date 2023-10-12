@@ -80,3 +80,13 @@ BLOCK_STR = '''{{
     }}
 }}
 '''
+
+XP_STR= '''{{
+    \"override\": false,
+    \"xp_values\": {{
+        \"{0}\": {{
+            \"{1}\": {2}
+        }}
+    }},
+    \"isTagFor\": [
+'''
