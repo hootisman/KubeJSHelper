@@ -1,15 +1,17 @@
 import csv
+import sys
 import os
 import shutil
 import datapackstrs
 from collections import defaultdict
 
+PARENTDIR = os.getcwd()
 SKILLS = ["magic", "slayer", "fish", "attack", "alch", "mine", "eng", "def", "build", "smith", "wood", "ranged", "craft", "farm", "fly", "cook", "agility", "navi", "hunt", "tame", "stealth", "char", "myst"]
 SKILLIDS = dict(zip(SKILLS,["magic","slayer","fishing","attack","alchemy","mining","engineering","defence","building","smithing","woodcutting","ranged","crafting","farming","flying","cooking","agility","navigation","hunter","taming","stealth","charisma","mysticcrafting"]))
 DATAPACKFILES = {"armor": datapackstrs.ARMOR_STR, "item": datapackstrs.ITEM_STR, "block": datapackstrs.BLOCK_STR}
 OUTPUTS = []
-OUTPUT_LOC = "output/"
-DATAPACK_LOC = "datapack/"
+OUTPUT_LOC = PARENTDIR + "/output/"
+DATAPACK_LOC = PARENTDIR + "/datapack/"
 TAGS = defaultdict(list)
 
 def create_datapack(idtype):
@@ -25,7 +27,7 @@ def getReq(tag, skill):
     return cutted[len(skill):]
 
 def parse_csv(idtype):
-    with open('sheets/' + idtype + '.csv', newline='') as csvfile:
+    with open(PARENTDIR + '/sheets/' + idtype + '.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
 
         #for each datapoint in csv
@@ -70,9 +72,15 @@ def file_write(loc,line):
         f.write(line)
 
 if __name__ == "__main__":
-    idtype = input('id type? (armor, item, block)\n')
-    # shutil.rmtree(OUTPUT_LOC)
-    # os.mkdir(OUTPUT_LOC)
+    # idtype = input('id type? (armor, item, block)\n')
+    idtype = sys.argv[1]
+    valid_args = ["item", "block","armor"]
+    
+    #if first argument is not valid
+    if not idtype in valid_args:
+        print("invalid arg, try again. ")
+        sys.exit(0)
+    
     
     OUTPUT_LOC = OUTPUT_LOC + idtype + '/'
     if os.path.exists(OUTPUT_LOC):
