@@ -50,7 +50,7 @@ def add_skill_xp(idtype,xptype,item,skill,xpval):
     xpval : int 
     value of xp we are setting ex: 1000, 640, etc.
     """
-    filepath = DATAPACK_LOC + xptype + "_" + skill + "_" + xpval + ".json"
+    filepath = DATAPACK_LOC + xptype.lower() + "_" + skill + "_" + xpval + ".json"
     if not os.path.exists(filepath):
         file_write(filepath, datapackstrs.XP_STR.format(xptype, SKILLIDS[skill], xpval))
         OUTPUTS.append(filepath) #for when we need to enclose files
@@ -81,7 +81,7 @@ if __name__ == "__main__":
         sys.exit(0)
     
 
-    DATAPACK_LOC = DATAPACK_LOC + idtype + '/xp/'   #sets output file to be whatever id type + xp
+    DATAPACK_LOC = DATAPACK_LOC + idtype + '_xp/'   #sets output file to be whatever id type + xp
     if os.path.exists(DATAPACK_LOC):
         shutil.rmtree(DATAPACK_LOC)
     os.makedirs(DATAPACK_LOC)

@@ -9,5 +9,7 @@ echo "kubejs scripts installed in path : " + $1
 
 cp -r "$path/datapack/armor" "$2/data/minecraft/pmmo/items/"
 cp -r "$path/datapack/item" "$2/data/minecraft/pmmo/items/"
+cp -r "$path/datapack/item_xp" "$2/data/minecraft/pmmo/items/"
 cp -r "$path/datapack/block" "$2/data/minecraft/pmmo/blocks/"
+cp -r "$path/datapack/block_xp" "$2/data/minecraft/pmmo/blocks/"
 echo "datapack scripts installed in path : " + $2
